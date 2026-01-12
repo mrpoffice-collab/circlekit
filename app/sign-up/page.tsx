@@ -1,5 +1,6 @@
 import { Users } from "lucide-react";
 import type { Metadata } from "next";
+import SignUpForm from "@/app/components/SignUpForm";
 
 export const metadata: Metadata = {
   title: "Sign Up - CircleKit",
@@ -42,103 +43,7 @@ export default function SignUpPage() {
               Start running professional support groups today
             </p>
 
-            <form className="space-y-4">
-              <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-900 mb-1"
-                >
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  placeholder="Enter your full name"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-gray-900"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-900 mb-1"
-                >
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  placeholder="you@example.com"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-gray-900"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-900 mb-1"
-                >
-                  Password
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  placeholder="Create a password"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-gray-900"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  I want to...
-                </label>
-                <div className="space-y-2">
-                  <label className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg cursor-pointer hover:border-teal-500">
-                    <input
-                      type="radio"
-                      name="role"
-                      value="facilitator"
-                      className="text-teal-600"
-                      defaultChecked
-                    />
-                    <div>
-                      <span className="font-medium text-gray-900">
-                        Run support groups
-                      </span>
-                      <p className="text-sm text-gray-600">
-                        I am a facilitator, coach, or peer specialist
-                      </p>
-                    </div>
-                  </label>
-                  <label className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg cursor-pointer hover:border-teal-500">
-                    <input
-                      type="radio"
-                      name="role"
-                      value="participant"
-                      className="text-teal-600"
-                    />
-                    <div>
-                      <span className="font-medium text-gray-900">
-                        Join a support group
-                      </span>
-                      <p className="text-sm text-gray-600">
-                        I am looking for group support
-                      </p>
-                    </div>
-                  </label>
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-3 bg-teal-600 text-white font-semibold rounded-lg hover:bg-teal-700"
-              >
-                Create Account
-              </button>
-            </form>
+            <SignUpForm />
 
             <div className="mt-6 text-center text-sm text-gray-600">
               By signing up, you agree to our{" "}
