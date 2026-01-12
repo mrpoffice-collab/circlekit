@@ -1,91 +1,26 @@
 import { Users, Clock, FileText } from "lucide-react";
 import type { Metadata } from "next";
+import prisma from "@/lib/db";
 
 export const metadata: Metadata = {
   title: "Session Templates - CircleKit",
   description:
-    "Browse 8 evidence-based group support session templates for grief, divorce, anxiety, self-esteem and more. Each includes facilitator guides and participant worksheets.",
+    "Browse evidence-based group support session templates for grief, divorce, anxiety, self-esteem and more. Each includes facilitator guides and participant worksheets.",
   alternates: {
     canonical: "https://circlekit.vercel.app/templates",
   },
 };
 
-const templates = [
-  {
-    name: "Grief and Loss Support",
-    category: "Grief",
-    weeks: 8,
-    duration: 90,
-    framework: "CBT + Grief-Informed Care",
-    description:
-      "Help adults who have lost a loved one process their grief through structured sessions covering understanding grief, naming emotions, challenging unhelpful thoughts, and moving forward.",
-  },
-  {
-    name: "Divorce Recovery",
-    category: "Life Transitions",
-    weeks: 6,
-    duration: 90,
-    framework: "CBT + Solution-Focused",
-    description:
-      "Support individuals navigating divorce with sessions on emotional processing, co-parenting strategies, identity rebuilding, and creating a new life chapter.",
-  },
-  {
-    name: "Step-Parenting Adjustment",
-    category: "Family",
-    weeks: 8,
-    duration: 90,
-    framework: "CBT + Family Systems",
-    description:
-      "Guide step-parents through the challenges of blended families, including boundary setting, building relationships with stepchildren, and managing family dynamics.",
-  },
-  {
-    name: "Caregiver Burnout Prevention",
-    category: "Wellness",
-    weeks: 6,
-    duration: 60,
-    framework: "CBT + Self-Compassion",
-    description:
-      "Help caregivers recognize burnout signs, set healthy boundaries, practice self-care, and build support systems while caring for loved ones.",
-  },
-  {
-    name: "Life Transitions",
-    category: "Life Transitions",
-    weeks: 6,
-    duration: 90,
-    framework: "ACT + Solution-Focused",
-    description:
-      "Support people navigating major life changes like career shifts, relocations, retirement, or empty nest with skills for adaptation and growth.",
-  },
-  {
-    name: "General Anxiety Management",
-    category: "Mental Health",
-    weeks: 8,
-    duration: 90,
-    framework: "CBT",
-    description:
-      "Teach evidence-based techniques for managing anxiety including cognitive restructuring, exposure exercises, relaxation skills, and worry management.",
-  },
-  {
-    name: "Building Self-Esteem",
-    category: "Personal Growth",
-    weeks: 6,
-    duration: 90,
-    framework: "CBT + Self-Compassion",
-    description:
-      "Guide participants through exercises to challenge negative self-talk, identify strengths, set boundaries, and develop a healthier self-image.",
-  },
-  {
-    name: "Substance Use Recovery Support",
-    category: "Recovery",
-    weeks: 12,
-    duration: 90,
-    framework: "CBT + Motivational Interviewing",
-    description:
-      "Provide ongoing support for individuals in recovery with sessions on trigger management, relapse prevention, building healthy habits, and creating a sober support network.",
-  },
-];
+async function getTemplates() {
+  return prisma.template.findMany({
+    where: { isPublic: true },
+    orderBy: { name: "asc" },
+  });
+}
 
-export default function TemplatesPage() {
+export default async function TemplatesPage() {
+  const templates = await getTemplates();
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -121,16 +56,16 @@ export default function TemplatesPage() {
             Evidence-Based Session Templates
           </h1>
           <p className="text-xl text-gray-700 max-w-3xl mx-auto">
-            Each template includes week-by-week session outlines, facilitator
-            guides, participant worksheets, and homework assignments based on
-            proven therapeutic frameworks.
+            {templates.length} professionally designed programs with week-by-week
+            session outlines, facilitator guides, participant worksheets, and
+            homework assignments based on proven therapeutic frameworks.
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
           {templates.map((template) => (
             <div
-              key={template.name}
+              key={template.id}
               className="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
             >
               <div className="flex items-center gap-2 mb-3">
@@ -139,11 +74,11 @@ export default function TemplatesPage() {
                 </span>
                 <div className="flex items-center gap-1 text-gray-600 text-sm">
                   <Clock className="w-4 h-4" />
-                  {template.weeks} weeks
+                  {template.programLength} weeks
                 </div>
                 <div className="flex items-center gap-1 text-gray-600 text-sm">
                   <FileText className="w-4 h-4" />
-                  {template.duration} min
+                  {template.sessionDuration} min
                 </div>
               </div>
               <h2 className="text-xl font-semibold text-gray-900 mb-2">
