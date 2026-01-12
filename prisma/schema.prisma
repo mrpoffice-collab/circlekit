@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  email     String   @unique
+  name      String
+  role      Role     @default(PARTICIPANT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  facilitatorProfile FacilitatorProfile?
+  enrollments        Enrollment[]
+  groupsCreated      Group[]
+}
+
+enum Role {
+  FACILITATOR
+  PARTICIPANT
+  ADMIN
+}
+
+model FacilitatorProfile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id])
+  bio             String?
+  credentials     String?
+  specializations String[]
+  username        String   @unique
+}
+
+model Template {
+  id              String   @id @default(cuid())
+  name            String
+  description     String
+  category        String
+  programLength   Int
+  sessionDuration Int
+  framework       String
+  sessions        Json
+  isPublic        Boolean  @default(true)
+  groups          Group[]
+}
+
+model Group {
+  id              String      @id @default(cuid())
+  name            String
+  description     String
+  facilitatorId   String
+  facilitator     User        @relation(fields: [facilitatorId], references: [id])
+  templateId      String
+  template        Template    @relation(fields: [templateId], references: [id])
+  format          Format
+  maxParticipants Int         @default(10)
+  price           Float
+  status          GroupStatus @default(DRAFT)
+  startDate       DateTime
+  dayOfWeek       Int
+  timeOfDay       String
+  timezone        String
+  createdAt       DateTime    @default(now())
+  enrollments     Enrollment[]
+}
+
+enum Format {
+  ONLINE
+  IN_PERSON
+  HYBRID
+}
+
+enum GroupStatus {
+  DRAFT
+  OPEN
+  FULL
+  IN_PROGRESS
+  COMPLETED
+}
+
+model Enrollment {
+  id         String           @id @default(cuid())
+  userId     String
+  user       User             @relation(fields: [userId], references: [id])
+  groupId    String
+  group      Group            @relation(fields: [groupId], references: [id])
+  status     EnrollmentStatus @default(REGISTERED)
+  enrolledAt DateTime         @default(now())
+
+  @@unique([userId, groupId])
+}
+
+enum EnrollmentStatus {
+  REGISTERED
+  ACTIVE
+  DROPPED_OUT
+  COMPLETED
+}
